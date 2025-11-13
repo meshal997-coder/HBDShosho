@@ -289,9 +289,11 @@
   <div id="main-content">
     <canvas id="heart"></canvas>
 
-    <!-- Audio element - Replace "iris.mp3" with your downloaded file -->
+    <!-- Audio element with multiple fallback sources -->
     <audio id="bg-music" loop preload="auto">
-      <source src="https://github.com/meshal997-coder/HBDShosho/blob/main/iris.mp3" type="audio/mpeg">
+      <source src="https://audio.jukehost.co.uk/4W5yUa7WQ1b1x3X8Z2q9V7c8Y5tR6wH" type="audio/mpeg">
+      <source src="https://www.soundjay.com/music/free-music-iris.mp3" type="audio/mpeg">
+      <source src="iris.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
     
@@ -353,6 +355,8 @@
       const toggleBtn = document.getElementById('toggle-music');
       const notification = document.getElementById('music-notification');
 
+      console.log('Initializing music...');
+
       // Show notification on first load
       setTimeout(() => {
         notification.classList.add('show');
@@ -363,9 +367,11 @@
 
       // Enable audio on first user interaction
       function enableAudio() {
+        console.log('User interaction detected, attempting to play music...');
         if (music.paused) {
           music.volume = 0.7;
           music.play().then(() => {
+            console.log('Music started successfully');
             toggleBtn.textContent = '🔊';
             musicInitialized = true;
           }).catch(e => {
@@ -393,6 +399,7 @@
           music.play().then(() => {
             toggleBtn.textContent = '🔊';
           }).catch(e => {
+            console.log('Toggle play failed:', e);
             notification.textContent = 'Click anywhere first';
             notification.classList.add('show');
             setTimeout(() => {
@@ -404,6 +411,12 @@
           toggleBtn.textContent = '🔇';
         }
       });
+
+      // Debug audio events
+      music.addEventListener('loadstart', () => console.log('Audio loading started'));
+      music.addEventListener('canplay', () => console.log('Audio can play'));
+      music.addEventListener('canplaythrough', () => console.log('Audio can play through'));
+      music.addEventListener('error', (e) => console.log('Audio error:', e));
 
       musicInitialized = true;
     }
@@ -425,7 +438,9 @@
       }, 1000);
     });
 
-    // Heart background animation
+    // [Rest of your existing JavaScript code remains the same...]
+    // Heart background animation, typing sequence, etc.
+
     function initHeartBackground() {
       const canvas = document.getElementById("heart");
       if (!canvas) return;
@@ -515,7 +530,6 @@
       loop();
     }
 
-    // Typing animation
     const lines = [
       "My Dearest Love,",
       "Happy Birthday to the most amazing person in my life!",
@@ -612,7 +626,6 @@
       const slideshowInterval = setInterval(nextImage, 3000);
     }
 
-    // Initialize heart background when main content is shown
     const observer = new MutationObserver((mutationsList) => {
       for (const mutation of mutationsList) {
         if (mutation.attributeName === 'class') {
